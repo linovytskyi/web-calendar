@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -179,8 +180,8 @@ class EventServiceTest {
         Event event = new Event();
         event.setTitle("Test Event");
         event.setDescription("Test Description");
-        event.setStartTime(LocalDateTime.of(2024, 12, 25, 10, 0));
-        event.setEndTime(LocalDateTime.of(2024, 12, 25, 12, 0));
+        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 25, 10, 0)));
+        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 25, 12, 0)));
         event.setLocation("Test Location");
         return event;
     }
@@ -196,8 +197,8 @@ class EventServiceTest {
         event.setId(2L);
         event.setTitle("Another Event");
         event.setDescription("Another Description");
-        event.setStartTime(LocalDateTime.of(2024, 12, 26, 14, 0));
-        event.setEndTime(LocalDateTime.of(2024, 12, 26, 16, 0));
+        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 26, 14, 0)));
+        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 26, 16, 0)));
         event.setLocation("Another Location");
         return event;
     }
@@ -206,8 +207,8 @@ class EventServiceTest {
         Event event = new Event();
         event.setTitle("Updated Event");
         event.setDescription("Updated Description");
-        event.setStartTime(LocalDateTime.of(2024, 12, 27, 9, 0));
-        event.setEndTime(LocalDateTime.of(2024, 12, 27, 11, 0));
+        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 27, 9, 0)));
+        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 27, 11, 0)));
         event.setLocation("Updated Location");
         return event;
     }

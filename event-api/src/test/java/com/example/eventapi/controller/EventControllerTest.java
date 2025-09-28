@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -264,8 +265,8 @@ class EventControllerTest {
         EventRequest request = new EventRequest();
         request.setTitle("Test Event");
         request.setDescription("Test Description");
-        request.setStartTime(LocalDateTime.of(2024, 12, 25, 10, 0));
-        request.setEndTime(LocalDateTime.of(2024, 12, 25, 12, 0));
+        request.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 25, 10, 0)));
+        request.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 25, 12, 0)));
         request.setLocation("Test Location");
         return request;
     }
@@ -274,8 +275,8 @@ class EventControllerTest {
         Event event = new Event();
         event.setTitle("Test Event");
         event.setDescription("Test Description");
-        event.setStartTime(LocalDateTime.of(2024, 12, 25, 10, 0));
-        event.setEndTime(LocalDateTime.of(2024, 12, 25, 12, 0));
+        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 25, 10, 0)));
+        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 25, 12, 0)));
         event.setLocation("Test Location");
         return event;
     }
@@ -291,8 +292,8 @@ class EventControllerTest {
         event.setId(2L);
         event.setTitle("Another Event");
         event.setDescription("Another Description");
-        event.setStartTime(LocalDateTime.of(2024, 12, 26, 14, 0));
-        event.setEndTime(LocalDateTime.of(2024, 12, 26, 16, 0));
+        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 26, 14, 0)));
+        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 26, 16, 0)));
         event.setLocation("Another Location");
         return event;
     }

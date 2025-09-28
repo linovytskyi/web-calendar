@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,8 +33,8 @@ public class EventRequestValidatorTest {
     @Test
     void validate_ShouldThrowExceptionWhenStartTimeIsInPast() {
         EventRequest pastRequest = createEventRequest();
-        pastRequest.setStartTime(LocalDateTime.now().minusHours(1));
-        pastRequest.setEndTime(LocalDateTime.now().plusHours(1));
+        pastRequest.setStartTime(Instant.from(LocalDateTime.now().minusHours(1)));
+        pastRequest.setEndTime(Instant.from(LocalDateTime.now().plusHours(1)));
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -49,8 +50,8 @@ public class EventRequestValidatorTest {
         LocalDateTime startTime = LocalDateTime.now().plusHours(2);
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
 
-        request.setStartTime(startTime);
-        request.setEndTime(endTime);
+        request.setStartTime(Instant.from(startTime));
+        request.setEndTime(Instant.from(endTime));
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -66,8 +67,8 @@ public class EventRequestValidatorTest {
         LocalDateTime pastTime = LocalDateTime.now().minusHours(2);
         LocalDateTime earlierPastTime = LocalDateTime.now().minusHours(3);
 
-        request.setStartTime(pastTime);
-        request.setEndTime(earlierPastTime);
+        request.setStartTime(Instant.from(pastTime));
+        request.setEndTime(Instant.from(earlierPastTime));
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -83,8 +84,8 @@ public class EventRequestValidatorTest {
     void validate_ShouldPassWhenStartTimeIsExactlyNow() {
         EventRequest request = createEventRequest();
         LocalDateTime now = LocalDateTime.now();
-        request.setStartTime(now.plusSeconds(1));
-        request.setEndTime(now.plusHours(1));
+        request.setStartTime(Instant.from(now.plusSeconds(1)));
+        request.setEndTime(Instant.from(now.plusHours(1)));
 
         assertDoesNotThrow(() -> eventRequestValidator.validate(request));
     }
@@ -93,8 +94,8 @@ public class EventRequestValidatorTest {
     void validate_ShouldThrowExceptionWhenEndTimeEqualsStartTime() {
         EventRequest request = createEventRequest();
         LocalDateTime time = LocalDateTime.now();
-        request.setStartTime(time);
-        request.setEndTime(time);
+        request.setStartTime(Instant.from(time));
+        request.setEndTime(Instant.from(time));
 
 
         IllegalArgumentException exception = assertThrows(
@@ -110,8 +111,8 @@ public class EventRequestValidatorTest {
         EventRequest request = new EventRequest();
         request.setTitle("Test Event");
         request.setDescription("Test Description");
-        request.setStartTime(LocalDateTime.now().plusHours(1));
-        request.setEndTime(LocalDateTime.now().plusHours(2));
+        request.setStartTime(Instant.from(LocalDateTime.now().plusHours(1)));
+        request.setEndTime(Instant.from(LocalDateTime.now().plusHours(2)));
         request.setLocation("Test Location");
         return request;
     }

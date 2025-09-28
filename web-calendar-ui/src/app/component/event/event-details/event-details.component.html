@@ -1,0 +1,101 @@
+<div class="container">
+  <div class="header">
+    <div class="header-actions">
+      <button class="back-button" (click)="onBackToCalendar()">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Calendar
+      </button>
+    </div>
+    <h1 class="page-title">Event Details</h1>
+  </div>
+
+  @if (notFound) {
+    <div class="error-container">
+      <div class="error-content">
+        <svg class="error-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <h2>Event Not Found</h2>
+        <p>The event you're looking for doesn't exist or may have been deleted.</p>
+        <button class="btn btn-primary" (click)="onBackToCalendar()">
+          Return to Calendar
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (event) {
+    <div class="event-details">
+      <div class="event-header">
+        <div class="event-header-content">
+          <h2 class="event-title">{{ event.title }}</h2>
+        </div>
+      </div>
+
+      <div class="event-info">
+        <div class="info-section">
+          <div class="info-item">
+            <div class="info-label">
+              <svg class="info-icon" viewBox="0 0 24 24">
+                <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+              </svg>
+              Start Time
+            </div>
+            <div class="info-value">{{ formattedStartDateTime }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <svg class="info-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              End Time
+            </div>
+            <div class="info-value">{{ formattedEndDateTime }}</div>
+          </div>
+
+          @if (event.location) {
+            <div class="info-item">
+              <div class="info-label">
+                <svg class="info-icon" viewBox="0 0 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                Location
+              </div>
+              <div class="info-value">{{ event.location }}</div>
+            </div>
+          }
+
+          @if (event.description) {
+            <div class="info-item description">
+              <div class="info-label">
+                <svg class="info-icon" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+                Description
+              </div>
+              <div class="info-value description-text">{{ event.description }}</div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="event-actions">
+        <button class="btn btn-secondary" (click)="onEditEvent()">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          Edit Event
+        </button>
+        <button class="btn btn-danger" (click)="onDeleteEvent()">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+          Delete Event
+        </button>
+      </div>
+    </div>
+  }
+</div>

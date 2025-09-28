@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,8 +14,8 @@ public class EventRequest {
     private String title;
     private String description;
     @NotNull(message = "start time cannot be null")
-    private LocalDateTime startTime;
+    private Instant startTime;
     @NotNull(message = "end time cannot be null")
-    private LocalDateTime endTime;
+    private Instant endTime;
     private String location;
 }

@@ -1,0 +1,101 @@
+<div class="event-form">
+  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label class="form-label required" for="title">Event Title</label>
+      <input
+        type="text"
+        id="title"
+        class="form-input"
+        [class.error]="hasError('title')"
+        placeholder="Enter event title"
+        formControlName="title">
+      @if (hasError('title')) {
+        <div class="error-text">{{ getError('title') }}</div>
+      }
+      @if (!hasError('title')) {
+        <div class="helper-text">Give your event a clear, descriptive title</div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Description</label>
+      <textarea
+        id="description"
+        class="form-input form-textarea"
+        placeholder="Add event description, agenda, or notes..."
+        formControlName="description"></textarea>
+      <div class="helper-text">Optional: Add details about the event</div>
+    </div>
+
+    <div class="form-group">
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            class="checkbox-input"
+            formControlName="isFullDay">
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-text">Whole Day Event</span>
+        </label>
+        <div class="helper-text">Toggle if this event lasts the entire day</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label required" for="start-datetime">
+          {{ isFullDay ? 'Start Date' : 'Start Date & Time' }}
+        </label>
+        <div class="datetime-group">
+          <input
+            type="datetime-local"
+            id="start-datetime"
+            class="form-input"
+            [class.error]="hasError('startDateTime')"
+            [class.date-only]="isFullDay"
+            formControlName="startDateTime">
+        </div>
+        @if (hasError('startDateTime')) {
+          <div class="error-text">{{ getError('startDateTime') }}</div>
+        }
+      </div>
+      <div class="form-group">
+        <label class="form-label required" for="end-datetime">
+          {{ isFullDay ? 'End Date' : 'End Date & Time' }}
+        </label>
+        <div class="datetime-group">
+          <input
+            type="datetime-local"
+            id="end-datetime"
+            class="form-input"
+            [class.error]="hasError('endDateTime')"
+            [class.date-only]="isFullDay"
+            formControlName="endDateTime">
+        </div>
+        @if (hasError('endDateTime')) {
+          <div class="error-text">{{ getError('endDateTime') }}</div>
+        }
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="location">Location</label>
+      <input
+        type="text"
+        id="location"
+        class="form-input"
+        placeholder="Add location or meeting link"
+        formControlName="location">
+      <div class="helper-text">Meeting room, address, or video call link</div>
+    </div>
+
+    <div class="form-footer">
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid">
+          {{ isEditMode ? 'Save Changes' : 'Create Event' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

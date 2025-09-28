@@ -1,0 +1,49 @@
+@if (isVisible) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Events for {{ getFormattedDate() }}</h2>
+        <button class="close-button" (click)="onCloseModal()" type="button">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="events-list">
+          @for (eventEntity of events; track eventEntity.event.id) {
+            <div class="event-item" [class.full-day-event]="eventEntity.isFullDay">
+              @if (!eventEntity.isFullDay) {
+                <div class="event-time">
+                  {{ formatEventTime(eventEntity.event.startTime) }}
+                  @if (isEventMultiDay(eventEntity)) {
+                    <span>- {{ formatEventTime(eventEntity.event.endTime) }}</span>
+                  }
+                </div>
+              }
+              @if (eventEntity.isFullDay) {
+                <div class="event-time full-day-label">All Day</div>
+              }
+              <div class="event-details">
+                <div class="event-title">
+                  <a [routerLink]="['/event', eventEntity.event.id]" [title]="eventEntity.event.title">
+                    {{ truncateEventTitle(eventEntity.event.title) }}
+                  </a>
+                </div>
+                @if (eventEntity.event.description) {
+                  <div class="event-description">{{ eventEntity.event.description }}</div>
+                }
+                @if (eventEntity.event.location) {
+                  <div class="event-location">📍 {{ eventEntity.event.location }}</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="onCloseModal()">Close</button>
+      </div>
+    </div>
+  </div>
+}

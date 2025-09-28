@@ -3,6 +3,7 @@ package com.example.eventapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,9 +19,9 @@ public class Event {
     @Column(name = "description")
     private String description;
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private Instant startTime;
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private Instant endTime;
     @Column(name = "location")
     private String location;
 }

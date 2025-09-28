@@ -1,0 +1,73 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div class="month-navigation">
+      <button class="nav-button" title="Previous month" (click)="goToPreviousMonth()">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </button>
+      <h1 class="current-month">{{ getSelectedMonthAndYearCombinationAsString() }}</h1>
+      <button class="nav-button" title="Next month" (click)="goToNextMonth()">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+        </svg>
+      </button>
+    </div>
+    <button class="add-event-btn" [routerLink]="'/add-event'">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+      </svg>
+      Add Event
+    </button>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="calendar-weekdays">
+      @for (weekDay of weekdays; track weekDay) {
+        <div class="weekday">{{ weekDay }}</div>
+      }
+    </div>
+
+    <div class="calendar-days">
+      @for (entity of calendarEntities; track entity.date) {
+        <div class="calendar-day">
+          <div class="day-number"
+               [className]="entity.anotherMonth ? 'day-other-month' : ''">{{ entity.date.getDate() }}
+          </div>
+          @if (entity.events?.length) {
+            <div class="events-container">
+              @for (eventEntity of getVisibleEvents(entity.events); track eventEntity.event.id) {
+                <div class="event event-clickable"
+                     [class.event-full-day]="eventEntity.isFullDay"
+                     [class.event-partial-day]="!eventEntity.isFullDay"
+                     [routerLink]="['/event', eventEntity.event.id]"
+                     title="Click to view event details">
+                  @if (!eventEntity.isFullDay && !isEventMultiDay(eventEntity.event)) {
+                    <span class="event-time">{{ formatEventTime(eventEntity.event.startTime) }}</span>
+                  }
+                  <span class="event-title" [title]="eventEntity.event.title">{{ truncateEventTitle(eventEntity.event.title) }}</span>
+                </div>
+              }
+
+              @if (hasMoreEvents(entity.events)) {
+                <button class="event more-events clickable"
+                        (click)="showMoreEvents(entity.events, entity.date)"
+                        title="Click to see all events">
+                  +{{ getHiddenEventsCount(entity.events) }} more
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Event Modal -->
+  <app-event-modal
+    [isVisible]="isModalVisible"
+    [events]="modalEvents"
+    [selectedDate]="modalDate"
+    (closeModal)="closeModal()">
+  </app-event-modal>
+</div>

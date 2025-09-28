@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="header">
+    <div class="header-actions">
+      <button class="back-button" (click)="onBackToEventDetails()">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Event
+      </button>
+    </div>
+    <h1 class="page-title">Edit Event</h1>
+  </div>
+
+  @if (eventNotFound) {
+    <div class="error-container">
+      <div class="error-content">
+        <svg class="error-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <h2>Event Not Found</h2>
+        <p>The event you're trying to edit doesn't exist or may have been deleted.</p>
+        <button class="btn btn-primary" (click)="onBackToEventDetails()">
+          Return to Calendar
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (event && !eventNotFound) {
+    <app-event-form
+      [existingEvent]="event"
+      [isEditMode]="true"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onBackToEventDetails()">
+    </app-event-form>
+  }
+</div>

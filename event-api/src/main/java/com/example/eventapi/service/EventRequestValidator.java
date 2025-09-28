@@ -4,6 +4,8 @@ import com.example.eventapi.dto.EventRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,6 @@ public class EventRequestValidator {
             errors.add("Start date and past data cannot be the same");
         }
 
-        if (isStartInPast(request)) {
-            errors.add("Start time must be in the future");
-        }
-
         if (isEndBeforeStart(request)) {
             errors.add("End time must be after start time");
         }
@@ -38,11 +36,11 @@ public class EventRequestValidator {
     }
 
     private boolean isStartDateAndPastDateSame(EventRequest request) {
-        return request.getStartTime().isEqual(request.getEndTime());
+        return request.getStartTime().equals(request.getEndTime());
     }
 
     private boolean isStartInPast(EventRequest request) {
-        return request.getStartTime().isBefore(LocalDateTime.now());
+        return request.getStartTime().isBefore(Instant.now());
     }
 
     private boolean isEndBeforeStart(EventRequest request) {
