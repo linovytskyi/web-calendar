@@ -14,6 +14,7 @@ public class EventMapper {
         event.setStartTime(request.getStartTime());
         event.setEndTime(request.getEndTime());
         event.setLocation(request.getLocation());
+        event.setColor(request.getColor());
         return event;
     }
 }

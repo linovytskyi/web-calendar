@@ -206,7 +206,6 @@
 }
 
 .event {
-  background: #1a73e8;
   color: #ffffff;
   font-size: 12px;
   padding: 6px 10px;
@@ -278,21 +277,6 @@
   color: #ffffff;
 }
 
-.event.event-green {
-  background: #34a853;
-}
-
-.event.event-red {
-  background: #ea4335;
-}
-
-.event.event-orange {
-  background: #ff9800;
-}
-
-.event.event-purple {
-  background: #9c27b0;
-}
 
 /* More events button styles */
 .more-events {

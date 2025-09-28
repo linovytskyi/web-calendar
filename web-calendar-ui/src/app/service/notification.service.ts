@@ -87,7 +87,6 @@ export class NotificationService {
     }
 
     this.showError(title, errorMessage);
-    console.error('HTTP Error:', error);
   }
 
   private addNotification(notification: Omit<NotificationMessage, 'id'>): void {

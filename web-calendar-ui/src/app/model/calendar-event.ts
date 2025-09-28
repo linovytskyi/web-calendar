@@ -5,4 +5,5 @@ export class CalendarEvent {
   public startTime: Date;
   public endTime: Date;
   public location: string;
+  public color: string;
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { EventService } from '../../../service/event.service';
 import { CalendarEvent } from '../../../model/calendar-event';
 import { EventDateTimeUtilService } from '../../../service/event-date-time-util.service';
@@ -14,9 +15,11 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.css'
 })
-export class EventDetailsComponent implements OnInit {
-  public event: CalendarEvent;
-  public notFound = false;
+export class EventDetailsComponent implements OnInit, OnDestroy {
+  public event: CalendarEvent | null = null;
+  public notFound: boolean = false;
+  private deleteEventSubscription: Subscription | null = null;
+  private loadEventSubscription: Subscription | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -56,7 +59,7 @@ export class EventDetailsComponent implements OnInit {
   public onDeleteEvent(): void {
     if (this.event && confirm('Are you sure you want to delete this event?')) {
       const eventTitle = this.event.title;
-      this.eventService.deleteEventById(this.event.id).subscribe({
+      this.deleteEventSubscription = this.eventService.deleteEventById(this.event.id).subscribe({
         next: () => {
           this.notificationService.showSuccess(
             'Event Deleted',
@@ -69,14 +72,13 @@ export class EventDetailsComponent implements OnInit {
             'Failed to Delete Event',
             'Unable to delete the event. Please try again.'
           );
-          console.error('Delete event error:', error);
         }
       });
     }
   }
 
   private loadEvent(id: number): void {
-    this.eventService.getEventById(id).subscribe({
+    this.loadEventSubscription = this.eventService.getEventById(id).subscribe({
       next: (eventById) => {
         this.event = eventById;
       },
@@ -87,6 +89,19 @@ export class EventDetailsComponent implements OnInit {
   }
 
   public formatDateTime(date: Date): string {
-    return this.eventDateTimeUtil.formatEventDateTime({ startTime: date } as any);
+    return this.eventDateTimeUtil.formatDateTime(date);
+  }
+
+  public getEventColor(): string {
+    return this.event?.color || '#1a73e8';
+  }
+
+  public ngOnDestroy(): void {
+    if (this.deleteEventSubscription && !this.deleteEventSubscription.closed) {
+      this.deleteEventSubscription.unsubscribe();
+    }
+    if (this.loadEventSubscription && !this.loadEventSubscription.closed) {
+      this.loadEventSubscription.unsubscribe();
+    }
   }
 }

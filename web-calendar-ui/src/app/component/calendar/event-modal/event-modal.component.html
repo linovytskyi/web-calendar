@@ -11,7 +11,10 @@
       <div class="modal-body">
         <div class="events-list">
           @for (eventEntity of events; track eventEntity.event.id) {
-            <div class="event-item" [class.full-day-event]="eventEntity.isFullDay">
+            <div class="event-item"
+                 [class.full-day-event]="eventEntity.isFullDay"
+                 [style.border-left-color]="getEventColor(eventEntity)">
+              <div class="event-color-indicator" [style.background-color]="getEventColor(eventEntity)"></div>
               @if (!eventEntity.isFullDay) {
                 <div class="event-time">
                   {{ formatEventTime(eventEntity.event.startTime) }}

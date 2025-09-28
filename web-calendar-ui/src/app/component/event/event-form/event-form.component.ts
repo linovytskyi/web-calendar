@@ -36,6 +36,17 @@ export class EventFormComponent implements OnInit, OnDestroy {
   private readonly MIN_TITLE_LENGTH = 1;
   private readonly MAX_TITLE_LENGTH = 255;
 
+  public readonly colorOptions = [
+    { name: 'Blue', value: '#1a73e8' },
+    { name: 'Green', value: '#34a853' },
+    { name: 'Red', value: '#ea4335' },
+    { name: 'Orange', value: '#ff9800' },
+    { name: 'Purple', value: '#9c27b0' },
+    { name: 'Teal', value: '#20c997' },
+    { name: 'Pink', value: '#e91e63' },
+    { name: 'Indigo', value: '#6f42c1' }
+  ];
+
   public get isFullDay(): boolean {
     return this.eventForm.get('isFullDay')?.value || false;
   }
@@ -50,7 +61,12 @@ export class EventFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach(subscription => {
+      if (subscription && !subscription.closed) {
+        subscription.unsubscribe();
+      }
+    });
+    this.subscriptions = [];
   }
 
   public onSubmit(): void {
@@ -84,6 +100,10 @@ export class EventFormComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  public onColorChange(color: string): void {
+    this.eventForm.patchValue({ color: color });
+  }
+
   private emitFormData(): void {
     const formValue = this.eventForm.value;
     let eventData: Omit<CalendarEvent, 'id'> = {
@@ -92,12 +112,12 @@ export class EventFormComponent implements OnInit, OnDestroy {
       startTime: this.eventDateTimeUtil.createDateFromDateTimeString(formValue.startDateTime),
       endTime: this.eventDateTimeUtil.createDateFromDateTimeString(formValue.endDateTime),
       location: formValue.location.trim(),
+      color: formValue.color || this.colorOptions[0].value,
     };
 
     if (formValue.isFullDay) {
       eventData = this.eventDateTimeUtil.setEventAsFullDay(eventData as CalendarEvent);
     }
-
 
     this.formSubmit.emit(eventData);
   }
@@ -109,7 +129,8 @@ export class EventFormComponent implements OnInit, OnDestroy {
       startDateTime: ['', Validators.required],
       endDateTime: ['', [Validators.required, this.endDateValidator.bind(this)]],
       location: [''],
-      isFullDay: [true]
+      isFullDay: [true],
+      color: [this.colorOptions[0].value]
     });
   }
 
@@ -123,7 +144,8 @@ export class EventFormComponent implements OnInit, OnDestroy {
         startDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal(this.existingEvent),
         endDateTime: this.eventDateTimeUtil.formatEventEndDateTimeLocal(this.existingEvent),
         location: this.existingEvent.location,
-        isFullDay: isFullDay
+        isFullDay: isFullDay,
+        color: this.existingEvent.color || this.colorOptions[0].value
       });
     } else {
       this.setDefaultDates();
@@ -138,8 +160,8 @@ export class EventFormComponent implements OnInit, OnDestroy {
     const defaultTimes = this.eventDateTimeUtil.createDefaultFullDayEvent(this.eventDateTimeUtil.getCurrentDate());
 
     this.eventForm.patchValue({
-      startDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal({ startTime: defaultTimes.startTime } as any),
-      endDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal({ startTime: defaultTimes.endTime } as any)
+      startDateTime: this.eventDateTimeUtil.formatDateTimeLocal(defaultTimes.startTime),
+      endDateTime: this.eventDateTimeUtil.formatDateTimeLocal(defaultTimes.endTime)
     });
   }
 
@@ -177,12 +199,12 @@ export class EventFormComponent implements OnInit, OnDestroy {
     if (isFullDay) {
       const fullDayTimes = this.eventDateTimeUtil.createDefaultFullDayEvent(startDate);
       this.eventForm.patchValue({
-        endDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal({ startTime: fullDayTimes.endTime } as any)
+        endDateTime: this.eventDateTimeUtil.formatDateTimeLocal(fullDayTimes.endTime)
       });
     } else if (endDate <= startDate) {
       const timedEvent = this.eventDateTimeUtil.createDefaultTimedEvent(startDate, startDate.getHours(), 1);
       this.eventForm.patchValue({
-        endDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal({ startTime: timedEvent.endTime } as any)
+        endDateTime: this.eventDateTimeUtil.formatDateTimeLocal(timedEvent.endTime)
       });
     }
   }
@@ -253,8 +275,8 @@ export class EventFormComponent implements OnInit, OnDestroy {
 
   private patchEventDates(start: Date, end: Date): void {
     this.eventForm.patchValue({
-      startDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal({ startTime: start } as any),
-      endDateTime: this.eventDateTimeUtil.formatEventDateTimeLocal({ startTime: end } as any)
+      startDateTime: this.eventDateTimeUtil.formatDateTimeLocal(start),
+      endDateTime: this.eventDateTimeUtil.formatDateTimeLocal(end)
     });
   }
 

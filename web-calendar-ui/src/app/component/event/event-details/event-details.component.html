@@ -28,9 +28,12 @@
 
   @if (event) {
     <div class="event-details">
-      <div class="event-header">
+      <div class="event-header" [style.border-left-color]="getEventColor()">
         <div class="event-header-content">
-          <h2 class="event-title">{{ event.title }}</h2>
+          <div class="event-title-with-color">
+            <div class="event-color-badge" [style.background-color]="getEventColor()"></div>
+            <h2 class="event-title">{{ event.title }}</h2>
+          </div>
         </div>
       </div>
 

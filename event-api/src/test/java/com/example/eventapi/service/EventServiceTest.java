@@ -50,6 +50,7 @@ class EventServiceTest {
         assertEquals(savedEvent.getStartTime(), result.getStartTime());
         assertEquals(savedEvent.getEndTime(), result.getEndTime());
         assertEquals(savedEvent.getLocation(), result.getLocation());
+        assertEquals(savedEvent.getColor(), result.getColor());
 
         verify(eventRepository, times(1)).save(testEvent);
     }
@@ -123,6 +124,7 @@ class EventServiceTest {
         assertEquals(updatedEventData.getStartTime(), savedEvent.getStartTime());
         assertEquals(updatedEventData.getEndTime(), savedEvent.getEndTime());
         assertEquals(updatedEventData.getLocation(), savedEvent.getLocation());
+        assertEquals(updatedEventData.getColor(), savedEvent.getColor());
 
         verify(eventRepository, times(1)).findById(eventId);
         verify(eventRepository, times(1)).save(savedEvent);
@@ -182,6 +184,7 @@ class EventServiceTest {
         event.setStartTime(Instant.parse("2024-12-25T10:00:00Z"));
         event.setEndTime(Instant.parse("2024-12-25T12:00:00Z"));
         event.setLocation("Test Location");
+        event.setColor("#1a73e8");
         return event;
     }
 
@@ -199,6 +202,7 @@ class EventServiceTest {
         event.setStartTime(Instant.parse("2024-12-26T14:00:00Z"));
         event.setEndTime(Instant.parse("2024-12-26T16:00:00Z"));
         event.setLocation("Another Location");
+        event.setColor("#34a853");
         return event;
     }
 
@@ -209,6 +213,7 @@ class EventServiceTest {
         event.setStartTime(Instant.parse("2024-12-27T09:00:00Z"));
         event.setEndTime(Instant.parse("2024-12-27T11:00:00Z"));
         event.setLocation("Updated Location");
+        event.setColor("#ea4335");
         return event;
     }
 }

@@ -52,6 +52,7 @@ public class EventService {
         existing.setStartTime(newEvent.getStartTime());
         existing.setEndTime(newEvent.getEndTime());
         existing.setLocation(newEvent.getLocation());
+        existing.setColor(newEvent.getColor());
 
         eventRepository.save(existing);
         LOGGER.info("Event with id: {} updated", id);

@@ -40,6 +40,7 @@
                 <div class="event event-clickable"
                      [class.event-full-day]="eventEntity.isFullDay"
                      [class.event-partial-day]="!eventEntity.isFullDay"
+                     [style.background-color]="getEventColor(eventEntity.event)"
                      [routerLink]="['/event', eventEntity.event.id]"
                      title="Click to view event details">
                   @if (!eventEntity.isFullDay && !isEventMultiDay(eventEntity.event)) {

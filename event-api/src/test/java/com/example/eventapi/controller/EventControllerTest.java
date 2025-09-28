@@ -67,7 +67,8 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("Test Event"))
                 .andExpect(jsonPath("$.description").value("Test Description"))
-                .andExpect(jsonPath("$.location").value("Test Location"));
+                .andExpect(jsonPath("$.location").value("Test Location"))
+                .andExpect(jsonPath("$.color").value("#1a73e8"));
 
         verify(eventRequestValidator, times(1)).validate(any(EventRequest.class));
         verify(eventMapper, times(1)).toEntity(any(EventRequest.class));
@@ -144,7 +145,8 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("Test Event"))
                 .andExpect(jsonPath("$.description").value("Test Description"))
-                .andExpect(jsonPath("$.location").value("Test Location"));
+                .andExpect(jsonPath("$.location").value("Test Location"))
+                .andExpect(jsonPath("$.color").value("#1a73e8"));
 
         verify(eventService, times(1)).getEventById(1L);
     }
@@ -267,6 +269,7 @@ class EventControllerTest {
         request.setStartTime(Instant.parse("2024-12-25T10:00:00Z"));
         request.setEndTime(Instant.parse("2024-12-25T12:00:00Z"));
         request.setLocation("Test Location");
+        request.setColor("#1a73e8");
         return request;
     }
 
@@ -277,6 +280,7 @@ class EventControllerTest {
         event.setStartTime(Instant.parse("2024-12-25T10:00:00Z"));
         event.setEndTime(Instant.parse("2024-12-25T12:00:00Z"));
         event.setLocation("Test Location");
+        event.setColor("#1a73e8");
         return event;
     }
 
@@ -294,6 +298,7 @@ class EventControllerTest {
         event.setStartTime(Instant.parse("2024-12-26T14:00:00Z"));
         event.setEndTime(Instant.parse("2024-12-26T16:00:00Z"));
         event.setLocation("Another Location");
+        event.setColor("#34a853");
         return event;
     }
 }

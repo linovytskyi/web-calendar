@@ -23,4 +23,6 @@ public class Event {
     private Instant endTime;
     @Column(name = "location")
     private String location;
+    @Column(name = "color")
+    private String color;
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { EventService } from '../../../service/event.service';
 import { CalendarEvent } from '../../../model/calendar-event';
 import { EventFormComponent } from '../event-form/event-form.component';
@@ -14,10 +15,12 @@ import { NotificationService } from '../../../service/notification.service';
   templateUrl: './edit-event.component.html',
   styleUrl: './edit-event.component.css'
 })
-export class EditEventComponent implements OnInit {
-  public event: CalendarEvent = null;
+export class EditEventComponent implements OnInit, OnDestroy {
+  public event: CalendarEvent | null = null;
   public eventNotFound: boolean = false;
   public isSubmitting: boolean = false;
+  private updateEventSubscription: Subscription | null = null;
+  private loadEventSubscription: Subscription | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -41,7 +44,7 @@ export class EditEventComponent implements OnInit {
     this.isSubmitting = true;
     eventData.id = this.event.id;
 
-    this.eventService.updateEvent(this.event.id, eventData).subscribe({
+    this.updateEventSubscription = this.eventService.updateEvent(this.event.id, eventData).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.event = eventData;
@@ -71,7 +74,7 @@ export class EditEventComponent implements OnInit {
   }
 
   private loadEvent(id: number): void {
-    this.eventService.getEventById(id).subscribe({
+    this.loadEventSubscription = this.eventService.getEventById(id).subscribe({
       next: (event) => {
         this.event = event;
       },
@@ -84,5 +87,14 @@ export class EditEventComponent implements OnInit {
         );
       }
     });
+  }
+
+  public ngOnDestroy(): void {
+    if (this.updateEventSubscription && !this.updateEventSubscription.closed) {
+      this.updateEventSubscription.unsubscribe();
+    }
+    if (this.loadEventSubscription && !this.loadEventSubscription.closed) {
+      this.loadEventSubscription.unsubscribe();
+    }
   }
 }

@@ -89,6 +89,29 @@
       <div class="helper-text">Meeting room, address, or video call link</div>
     </div>
 
+    <div class="form-group">
+      <label class="form-label" for="color">Event Color</label>
+      <div class="color-selector">
+        @for (colorOption of colorOptions; track colorOption.value) {
+          <label class="color-option" (click)="onColorChange(colorOption.value)">
+            <input
+              type="radio"
+              name="color"
+              class="color-input"
+              [value]="colorOption.value"
+              [checked]="eventForm.get('color')?.value === colorOption.value"
+              [attr.aria-label]="'Select ' + colorOption.name + ' color'"
+              readonly>
+            <span class="color-circle"
+                  [style.background-color]="colorOption.value"
+                  [title]="colorOption.name"
+                  [attr.aria-hidden]="true"></span>
+          </label>
+        }
+      </div>
+      <div class="helper-text">Choose a color to categorize your event</div>
+    </div>
+
     <div class="form-footer">
       <div class="form-actions">
         <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>

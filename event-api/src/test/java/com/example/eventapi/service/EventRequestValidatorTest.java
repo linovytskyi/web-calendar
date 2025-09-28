@@ -74,6 +74,56 @@ public class EventRequestValidatorTest {
         assertTrue(errorMessage.contains("Start date and past data cannot be the same"));
     }
 
+    @Test
+    void validate_ShouldPassForValidHexColor() {
+        EventRequest request = createEventRequest();
+        request.setColor("#6f42c1");
+
+        assertDoesNotThrow(() -> eventRequestValidator.validate(request));
+    }
+
+    @Test
+    void validate_ShouldPassForNullColor() {
+        EventRequest request = createEventRequest();
+        request.setColor(null);
+
+        assertDoesNotThrow(() -> eventRequestValidator.validate(request));
+    }
+
+    @Test
+    void validate_ShouldPassForEmptyColor() {
+        EventRequest request = createEventRequest();
+        request.setColor("");
+
+        assertDoesNotThrow(() -> eventRequestValidator.validate(request));
+    }
+
+    @Test
+    void validate_ShouldThrowExceptionForInvalidColorFormat() {
+        EventRequest request = createEventRequest();
+        request.setColor("invalid");
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> eventRequestValidator.validate(request)
+        );
+
+        assertEquals("Color must be a valid hex color code (e.g., #6f42c1)", exception.getMessage());
+    }
+
+    @Test
+    void validate_ShouldThrowExceptionForColorWithoutHash() {
+        EventRequest request = createEventRequest();
+        request.setColor("6f42c1");
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> eventRequestValidator.validate(request)
+        );
+
+        assertEquals("Color must be a valid hex color code (e.g., #6f42c1)", exception.getMessage());
+    }
+
     private EventRequest createEventRequest() {
         EventRequest request = new EventRequest();
         request.setTitle("Test Event");

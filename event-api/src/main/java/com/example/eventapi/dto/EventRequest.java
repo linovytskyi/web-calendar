@@ -17,4 +17,5 @@ public class EventRequest {
     @NotNull(message = "end time cannot be null")
     private Instant endTime;
     private String location;
+    private String color;
 }

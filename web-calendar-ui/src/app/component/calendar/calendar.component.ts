@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CalendarEvent } from '../../model/calendar-event';
 import { EventService } from '../../service/event.service';
 import { EventDateTimeUtilService } from '../../service/event-date-time-util.service';
@@ -25,19 +26,22 @@ export interface CalendarEventEntity {
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css'
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   public readonly weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   public calendarEntities: CalendarEntity[] = [];
   public selectedDate: Date;
   public isModalVisible = false;
   public modalEvents: CalendarEventEntity[] = [];
-  public modalDate: Date = null;
+  public modalDate: Date | null = null;
+  public isLoading = false;
+  public error: string | null = null;
 
   private currentDate: Date;
   private readonly calendarEntityMap = new Map<string, CalendarEntity>();
   private readonly AMOUNT_OF_CELLS = 35;
   private readonly MAX_VISIBLE_EVENTS = 4;
   private readonly MAX_VISIBLE_SYMBOLS_OF_TITLE = 16;
+  private eventsSubscription: Subscription | null = null;
 
   constructor(
     private readonly eventService: EventService,
@@ -131,10 +135,20 @@ export class CalendarComponent implements OnInit {
 
     this.initializeCalendarGrid(startDay);
 
-    this.eventService.getAllEvents().subscribe(events => {
-      this.processAndDistributeEvents(events);
-      this.sortCalendarEvents();
-      console.log(this.calendarEntities)
+    this.isLoading = true;
+    this.error = null;
+
+    this.eventsSubscription = this.eventService.getAllEvents().subscribe({
+      next: (events) => {
+        this.processAndDistributeEvents(events);
+        this.sortCalendarEvents();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.error = 'Failed to load events. Please try again.';
+        this.isLoading = false;
+        console.error('Error loading events:', error);
+      }
     });
   }
 
@@ -200,6 +214,16 @@ export class CalendarComponent implements OnInit {
 
   public isToday(date: Date): boolean {
     return this.dateTimeUtil.isSameDay(date, this.currentDate);
+  }
+
+  public getEventColor(event: CalendarEvent): string {
+    return event.color || '#1a73e8';
+  }
+
+  public ngOnDestroy(): void {
+    if (this.eventsSubscription && !this.eventsSubscription.closed) {
+      this.eventsSubscription.unsubscribe();
+    }
   }
 }
 

@@ -82,6 +82,22 @@ export class EventDateTimeUtilService {
     return this.dateTimeUtil.formatDateTimeLocal(event.endTime);
   }
 
+  public formatDateTimeLocal(date: Date): string {
+    return this.dateTimeUtil.formatDateTimeLocal(date);
+  }
+
+  public formatDateOnly(date: Date): string {
+    return this.dateTimeUtil.formatDateOnly(date);
+  }
+
+  public formatTime(date: Date): string {
+    return this.dateTimeUtil.formatTime(date);
+  }
+
+  public formatDateTime(date: Date): string {
+    return this.dateTimeUtil.formatDateTime(date);
+  }
+
   public getCalendarStartDate(selectedDate: Date): Date {
     return this.dateTimeUtil.getCalendarStartDate(selectedDate);
   }

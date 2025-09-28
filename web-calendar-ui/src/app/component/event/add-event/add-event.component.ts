@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { EventService } from '../../../service/event.service';
 import { CalendarEvent } from '../../../model/calendar-event';
 import { EventFormComponent } from '../event-form/event-form.component';
@@ -14,8 +15,9 @@ import { NotificationService } from '../../../service/notification.service';
   templateUrl: './add-event.component.html',
   styleUrl: './add-event.component.css'
 })
-export class AddEventComponent {
+export class AddEventComponent implements OnDestroy {
   public isSubmitting: boolean = false;
+  private addEventSubscription: Subscription | null = null;
 
   constructor(
     private readonly eventService: EventService,
@@ -26,7 +28,7 @@ export class AddEventComponent {
   public onFormSubmit(eventData: CalendarEvent): void {
     this.isSubmitting = true;
 
-    this.eventService.addEvent(eventData).subscribe({
+    this.addEventSubscription = this.eventService.addEvent(eventData).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.notificationService.showSuccess(
@@ -48,5 +50,11 @@ export class AddEventComponent {
 
   public onFormCancel(): void {
     this.router.navigate(['/calendar']);
+  }
+
+  public ngOnDestroy(): void {
+    if (this.addEventSubscription && !this.addEventSubscription.closed) {
+      this.addEventSubscription.unsubscribe();
+    }
   }
 }

@@ -19,7 +19,7 @@ export class EventModalComponent {
   @Input()
   public events: CalendarEventEntity[] = [];
   @Input()
-  public selectedDate: Date = null;
+  public selectedDate: Date | null = null;
   @Output()
   public closeModal = new EventEmitter<void>();
 
@@ -39,11 +39,11 @@ export class EventModalComponent {
 
   public getFormattedDate(): string {
     if (!this.selectedDate) return '';
-    return this.eventDateTimeUtil.formatEventDateOnly({ startTime: this.selectedDate } as any);
+    return this.eventDateTimeUtil.formatDateOnly(this.selectedDate);
   }
 
   public formatEventTime(eventTime: Date): string {
-    return this.eventDateTimeUtil.formatEventTime({ startTime: eventTime } as any);
+    return this.eventDateTimeUtil.formatTime(eventTime);
   }
 
   public isEventMultiDay(eventEntity: CalendarEventEntity): boolean {
@@ -52,5 +52,9 @@ export class EventModalComponent {
 
   public truncateEventTitle(title: string): string {
     return this.eventService.truncateEventTitle(title, this.MAX_VISIBLE_SYMBOLS_OF_TITLE);
+  }
+
+  public getEventColor(eventEntity: CalendarEventEntity): string {
+    return eventEntity.event.color || '#1a73e8';
   }
 }
