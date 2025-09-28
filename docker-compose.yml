@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:8.0
@@ -39,10 +37,10 @@ services:
       mysql:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/events"]
       timeout: 10s
-      retries: 5
-      interval: 30s
+      retries: 3
+      interval: 10s
     networks:
       - web-calendar-network
 
@@ -56,6 +54,12 @@ services:
     depends_on:
       event-api:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: always
     networks:
       - web-calendar-network
 

@@ -197,5 +197,9 @@ export class CalendarComponent implements OnInit {
     this.modalEvents = [];
     this.modalDate = null;
   }
+
+  public isToday(date: Date): boolean {
+    return this.dateTimeUtil.isSameDay(date, this.currentDate);
+  }
 }
 

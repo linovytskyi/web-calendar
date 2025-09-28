@@ -30,7 +30,7 @@
 
     <div class="calendar-days">
       @for (entity of calendarEntities; track entity.date) {
-        <div class="calendar-day">
+        <div class="calendar-day" [class.day-today]="isToday(entity.date)">
           <div class="day-number"
                [className]="entity.anotherMonth ? 'day-other-month' : ''">{{ entity.date.getDate() }}
           </div>
