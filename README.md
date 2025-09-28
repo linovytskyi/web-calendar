@@ -1,7 +1,7 @@
 # Web Calendar
 
 A full-stack web calendar application that allows users to create, view, and manage events. The application consists of a Spring Boot backend API with MySQL database and an Angular frontend.
-Part of the frontend (HTML, CSS) and some logic of components and services were implemented via Claude Code.
+Part of the frontend (HTML, CSS) and some logic of components and services were implemented via Claude Code. Google Calendar was used as a design concept.
 
 ## Architecture
 
