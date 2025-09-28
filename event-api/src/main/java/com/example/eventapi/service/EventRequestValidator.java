@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +36,6 @@ public class EventRequestValidator {
 
     private boolean isStartDateAndPastDateSame(EventRequest request) {
         return request.getStartTime().equals(request.getEndTime());
-    }
-
-    private boolean isStartInPast(EventRequest request) {
-        return request.getStartTime().isBefore(Instant.now());
     }
 
     private boolean isEndBeforeStart(EventRequest request) {

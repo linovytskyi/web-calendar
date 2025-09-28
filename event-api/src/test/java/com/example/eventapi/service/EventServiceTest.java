@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -180,8 +179,8 @@ class EventServiceTest {
         Event event = new Event();
         event.setTitle("Test Event");
         event.setDescription("Test Description");
-        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 25, 10, 0)));
-        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 25, 12, 0)));
+        event.setStartTime(Instant.parse("2024-12-25T10:00:00Z"));
+        event.setEndTime(Instant.parse("2024-12-25T12:00:00Z"));
         event.setLocation("Test Location");
         return event;
     }
@@ -197,8 +196,8 @@ class EventServiceTest {
         event.setId(2L);
         event.setTitle("Another Event");
         event.setDescription("Another Description");
-        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 26, 14, 0)));
-        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 26, 16, 0)));
+        event.setStartTime(Instant.parse("2024-12-26T14:00:00Z"));
+        event.setEndTime(Instant.parse("2024-12-26T16:00:00Z"));
         event.setLocation("Another Location");
         return event;
     }
@@ -207,8 +206,8 @@ class EventServiceTest {
         Event event = new Event();
         event.setTitle("Updated Event");
         event.setDescription("Updated Description");
-        event.setStartTime(Instant.from(LocalDateTime.of(2024, 12, 27, 9, 0)));
-        event.setEndTime(Instant.from(LocalDateTime.of(2024, 12, 27, 11, 0)));
+        event.setStartTime(Instant.parse("2024-12-27T09:00:00Z"));
+        event.setEndTime(Instant.parse("2024-12-27T11:00:00Z"));
         event.setLocation("Updated Location");
         return event;
     }

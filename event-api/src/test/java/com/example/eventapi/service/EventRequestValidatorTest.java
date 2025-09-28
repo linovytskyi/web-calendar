@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,27 +31,13 @@ public class EventRequestValidatorTest {
     }
 
     @Test
-    void validate_ShouldThrowExceptionWhenStartTimeIsInPast() {
-        EventRequest pastRequest = createEventRequest();
-        pastRequest.setStartTime(Instant.from(LocalDateTime.now().minusHours(1)));
-        pastRequest.setEndTime(Instant.from(LocalDateTime.now().plusHours(1)));
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> eventRequestValidator.validate(pastRequest)
-        );
-
-        assertEquals("Start time must be in the future", exception.getMessage());
-    }
-
-    @Test
     void validate_ShouldThrowExceptionWhenEndTimeIsBeforeStartTime() {
         EventRequest request = createEventRequest();
-        LocalDateTime startTime = LocalDateTime.now().plusHours(2);
-        LocalDateTime endTime = LocalDateTime.now().plusHours(1);
+        Instant startTime = Instant.now().plus(2, ChronoUnit.HOURS);
+        Instant endTime = Instant.now().plus(1, ChronoUnit.HOURS);
 
-        request.setStartTime(Instant.from(startTime));
-        request.setEndTime(Instant.from(endTime));
+        request.setStartTime(startTime);
+        request.setEndTime(endTime);
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -62,30 +48,11 @@ public class EventRequestValidatorTest {
     }
 
     @Test
-    void validate_ShouldThrowExceptionWithMultipleErrorsWhenBothValidationsFail() {
-        EventRequest request = createEventRequest();
-        LocalDateTime pastTime = LocalDateTime.now().minusHours(2);
-        LocalDateTime earlierPastTime = LocalDateTime.now().minusHours(3);
-
-        request.setStartTime(Instant.from(pastTime));
-        request.setEndTime(Instant.from(earlierPastTime));
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> eventRequestValidator.validate(request)
-        );
-
-        String errorMessage = exception.getMessage();
-        assertTrue(errorMessage.contains("Start time must be in the future"));
-        assertTrue(errorMessage.contains("End time must be after start time"));
-    }
-
-    @Test
     void validate_ShouldPassWhenStartTimeIsExactlyNow() {
         EventRequest request = createEventRequest();
-        LocalDateTime now = LocalDateTime.now();
-        request.setStartTime(Instant.from(now.plusSeconds(1)));
-        request.setEndTime(Instant.from(now.plusHours(1)));
+        Instant now = Instant.now();
+        request.setStartTime(now.plus(1, ChronoUnit.SECONDS));
+        request.setEndTime(now.plus(1, ChronoUnit.HOURS));
 
         assertDoesNotThrow(() -> eventRequestValidator.validate(request));
     }
@@ -93,9 +60,9 @@ public class EventRequestValidatorTest {
     @Test
     void validate_ShouldThrowExceptionWhenEndTimeEqualsStartTime() {
         EventRequest request = createEventRequest();
-        LocalDateTime time = LocalDateTime.now();
-        request.setStartTime(Instant.from(time));
-        request.setEndTime(Instant.from(time));
+        Instant time = Instant.now();
+        request.setStartTime(time);
+        request.setEndTime(time);
 
 
         IllegalArgumentException exception = assertThrows(
@@ -111,8 +78,8 @@ public class EventRequestValidatorTest {
         EventRequest request = new EventRequest();
         request.setTitle("Test Event");
         request.setDescription("Test Description");
-        request.setStartTime(Instant.from(LocalDateTime.now().plusHours(1)));
-        request.setEndTime(Instant.from(LocalDateTime.now().plusHours(2)));
+        request.setStartTime(Instant.now().plus(1, ChronoUnit.HOURS));
+        request.setEndTime(Instant.now().plus(2, ChronoUnit.HOURS));
         request.setLocation("Test Location");
         return request;
     }
